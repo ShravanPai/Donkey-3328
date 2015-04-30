@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+<script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.3.14/angular.min.js"></script>
+<script type="text/javascript" src="scripts/Login.js"></script>
+</head>
+
+<body bgcolor="#E4DDA5" data-ng-app="LoginApp">
+
+<center><h1> Welcome to Donkey, a card game </h1></center>
+<div align="center" data-ng-app="LoginApp" data-ng-controller="LoginController">
+ 	<p>Username: <input type="text" data-ng-model="userName"></p>
+ 	<p>Password: <input type="password" data-ng-model="password"></p>
+ 	<button data-ng-click="login()">Log In</button>
+ 	<p>{{ message }}</p>
+</div>
+
+</body>
+</html>

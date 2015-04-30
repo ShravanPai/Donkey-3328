@@ -1,0 +1,2 @@
+serviceClass: donkey.client.GreetingService
+path: A5D31C55025C67231D542EF44DD6412B.gwt.rpc
