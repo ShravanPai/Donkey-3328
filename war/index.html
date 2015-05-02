@@ -10,11 +10,15 @@
 
 <center><h1> Welcome to Donkey, a card game </h1></center>
 <div align="center" data-ng-app="LoginApp" data-ng-controller="LoginController">
+<div data-ng-hide="loginSuccess">
  	<p>Username: <input type="text" data-ng-model="userName"></p>
  	<p>Password: <input type="password" data-ng-model="password"></p>
  	<button data-ng-click="login()">Log In</button>
- 	<p>{{ message }}</p>
+ 	</div>
+<div ng-show="loginSuccess">
+	<p> <img src="images/deck.jpg" alt="deck" width="128" height="128"> </p>
 </div>
-
+	<p>{{ message }}</p>
+</div>
 </body>
 </html>
