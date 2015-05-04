@@ -1,7 +1,7 @@
-package com.util.classes;
+package donkey.server.utils;
 
-import com.donkey.util.Card;
-import com.donkey.util.Constants;
+import donkey.server.interfaces.Card;
+import donkey.server.interfaces.Constants;
 
 public class PlayCard implements Card {
 

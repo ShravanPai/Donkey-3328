@@ -1,6 +1,6 @@
-package com.donkey.util;
+package donkey.server.interfaces;
 
-import com.util.classes.PlayCard;
+import donkey.server.utils.PlayCard;
 
 public interface Player {
 

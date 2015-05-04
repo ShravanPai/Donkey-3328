@@ -1,4 +1,4 @@
-package com.util.classes;
+package donkey.server.utils;
 
 import java.util.ArrayList;
 import java.util.Hashtable;
@@ -7,8 +7,8 @@ import java.util.List;
 import java.util.Random;
 import java.util.Set;
 
-import com.donkey.util.Platform;
-import com.donkey.util.Player;
+import donkey.server.interfaces.Platform;
+import donkey.server.interfaces.Player;
 
 public class DonkeyPlatform implements Platform {
 

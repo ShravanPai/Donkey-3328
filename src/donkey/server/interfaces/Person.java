@@ -1,4 +1,4 @@
-package com.donkey.util;
+package donkey.server.interfaces;
 
 public class Person {
 

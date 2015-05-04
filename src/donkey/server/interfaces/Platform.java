@@ -1,8 +1,8 @@
-package com.donkey.util;
+package donkey.server.interfaces;
 
 import java.util.List;
 
-import com.util.classes.PlayCard;
+import donkey.server.utils.PlayCard;
 
 public interface Platform {
 

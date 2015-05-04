@@ -1,9 +1,9 @@
-package com.util.classes;
+package donkey.server.utils;
 
 import java.util.ArrayList;
 import java.util.List;
-import com.donkey.util.Constants;
-import com.donkey.util.Deck;
+import donkey.server.interfaces.Constants;
+import donkey.server.interfaces.Deck;
 
 public class PlayingDeck implements Deck {
 

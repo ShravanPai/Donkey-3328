@@ -1,11 +1,14 @@
-package com.util.classes;
+package donkey.server.utils;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import com.donkey.util.Person;
-import com.donkey.util.Player;
+import javax.xml.bind.annotation.XmlRootElement;
 
+import donkey.server.interfaces.Person;
+import donkey.server.interfaces.Player;
+
+@XmlRootElement
 public class CardPlayer extends Person implements Player{
 
 	private List<PlayCard> myCards;
