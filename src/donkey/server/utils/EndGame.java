@@ -12,8 +12,13 @@ public class EndGame {
 	@GET
 	@Produces(MediaType.TEXT_PLAIN)
 	public String clearGameParameters() {
-		Data.host = null;
+		return endGame();
+	}
+	
+	private String endGame() {
+		Data.host = "";
 		Data.numberOfPlayers = 0;
-		return "Successfully ended the game";
+		Data.playerIPs.clear();
+		return "Successfully ended this game";
 	}
 }

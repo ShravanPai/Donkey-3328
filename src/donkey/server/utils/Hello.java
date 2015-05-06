@@ -1,11 +1,13 @@
 package donkey.server.utils;
 
-import javax.ws.rs.Consumes;
+import java.util.Map;
+
+import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.GET;
-import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
+import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 
 
@@ -25,18 +27,49 @@ public class Hello {
 	// This method is called if TEXT_PLAIN is request
 	@GET
 	@Produces(MediaType.TEXT_PLAIN)
-	public String sayPlainTextHello(@PathParam("userName") String userName, @PathParam("password") String password) {
+	public String sayPlainTextHello(@PathParam("userName") String userName, @Context HttpServletRequest req) {
+		String ip = req.getRemoteAddr();
+		
+		if (!isUniqueName(userName))
+			return "Please select a unique name";
+		
+		// Check to see if there is multiple request from the same ip
+		if (Data.playerIPs.containsKey(ip)) {
+			if (isHost(ip))
+				return Data.playerIPs.get(ip) + ", you are the host";
+			else
+				return Data.playerIPs.get(ip) + ", there is already one game in progress, please join it or wait till it ends";
+		}
+		
 		if (Data.numberOfPlayers == 0) {
+			Data.playerIPs.put(ip, userName);
 			Data.numberOfPlayers++;
-			Data.host = userName;
-			return "Welcome " + userName + ", you are the host!!";		
+			Data.host = ip;
+			System.out.println("Player : " + Data.playerIPs.get(ip));
+			return "Welcome " + Data.playerIPs.get(ip) + ", you are the host!!";
 		} else {
+			Data.playerIPs.put(ip, userName);
 			Data.numberOfPlayers++;
-			return "Welcome " + userName + ", your host is " + Data.host + ", and there are "
+			return "Welcome " + Data.playerIPs.get(ip) + ", your host is " + Data.playerIPs.get(Data.host) + ", and there are "
 					+ Data.numberOfPlayers + " players";
 		}
 	}
 	
+	private boolean isUniqueName(String name) {
+		for (Map.Entry<String, String> entry : Data.playerIPs.entrySet())
+			if (name.trim().equals(entry.getValue()))
+				return false;
+		return true;
+	}
+	
+	private boolean isHost(String ip) {
+		if (Data.host.equals(ip))
+			return true;
+		else
+			return false;
+	}
+}
+
 	/*@POST
 	@Produces(MediaType.TEXT_PLAIN)
 	@Consumes(MediaType.APPLICATION_JSON)
@@ -46,4 +79,3 @@ public class Hello {
 		return "Welcome : " ;//+ user.getName();
 	}*/
 	
-}
