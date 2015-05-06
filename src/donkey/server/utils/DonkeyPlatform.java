@@ -4,8 +4,10 @@ import java.util.ArrayList;
 import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 import java.util.Random;
 import java.util.Set;
+import java.util.TreeMap;
 
 import donkey.server.interfaces.Platform;
 import donkey.server.interfaces.Player;
@@ -15,7 +17,7 @@ public class DonkeyPlatform implements Platform {
 	private List<PlayCard> currentPlayCards = new ArrayList<PlayCard>();
 	private List<PlayCard> passedPlayCards = new ArrayList<PlayCard>();
 	private PlayingDeck deck;
-	private Hashtable<String, CardPlayer> players = new Hashtable<String, CardPlayer>();
+	private Map<String, CardPlayer> players = new TreeMap<String, CardPlayer>();
 
 	public DonkeyPlatform() {
 		deck             = new PlayingDeck();
@@ -72,7 +74,7 @@ public class DonkeyPlatform implements Platform {
 	}
 
 	// get all the player object table
-	public Hashtable<String, CardPlayer> getPlayerTable() {
+	public Map<String, CardPlayer> getPlayerMap() {
 		return players;
 	}
 
@@ -120,5 +122,17 @@ public class DonkeyPlatform implements Platform {
 	
 	public void playCard() {
 		// TODO : logic to play card and collect cards on platform
+	}
+	
+	// Resets all the parameters
+	public void clearPlatformParameters() {
+		clearGame();
+	}
+	
+	private void clearGame() {
+		this.currentPlayCards.clear();
+		this.passedPlayCards.clear();
+		this.deck = null;
+		this.players.clear();
 	}
 }

@@ -33,4 +33,14 @@ LoginApp.controller('LoginController', function($scope, $http) {
     		$scope.message = 'Error in getting response : ' + data;
     	});
     };
+    // TODO : Use post method to fetch data instead of get
+    $scope.instructions = function() {
+    	$http.get('http://donkey-3328.appspot.com/game/instructions/').
+		success(function(data) {
+			alert(data);
+		}).
+    	error(function(data, status, headers, config){
+    		$scope.message = 'Error in getting response : ' + data;
+    	});
+    };
 });

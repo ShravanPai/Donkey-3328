@@ -19,6 +19,7 @@ public class EndGame {
 		Data.host = "";
 		Data.numberOfPlayers = 0;
 		Data.playerIPs.clear();
+		Data.platform.clearPlatformParameters();
 		return "Successfully ended this game";
 	}
 }

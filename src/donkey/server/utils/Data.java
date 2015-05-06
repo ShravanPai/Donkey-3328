@@ -3,6 +3,8 @@ package donkey.server.utils;
 import java.util.HashMap;
 import java.util.Map;
 
+import donkey.server.interfaces.Platform;
+
 
 public class Data {
 
@@ -10,5 +12,7 @@ public class Data {
 	public static String host = null;
 	
 	public static Map<String, String> playerIPs = new HashMap<String, String>();
+	
+	public static Platform platform = new DonkeyPlatform();
 	
 }
