@@ -41,9 +41,8 @@ LoginApp.controller('LoginController', function($scope, $http, $cookieStore) {
     			}
         		$scope.message = data;
         		$scope.loginSuccess = true;
-        		$scope.gameInfo
+        		$scope.gameInfo.loginSuccess = true;
         		$cookieStore.put('gameInfo', $scope.gameInfo);
-        		console.log('Cookie value : ' + $cookieStore.get('gameInfo').isHost);
         	}).
         	error(function(data, status, headers, config){
         		$scope.message = 'Error in getting response : ' + data;
