@@ -12,6 +12,7 @@ LoginApp.controller('LoginController', function($scope, $http, $cookieStore) {
     		$scope.message = 'You are already in the game as ' + $cookieStore.get('gameInfo').userName;
     		$scope.isHost = $cookieStore.get('gameInfo').isHost;
     		$scope.loginSuccess = $cookieStore.get('gameInfo').loginSuccess;
+    		$scope.gameInProgress = $cookieStore.get('gameInfo').gameInProgress;
     		console.log($scope.loginSuccess);
     	}		
 	};
@@ -25,6 +26,7 @@ LoginApp.controller('LoginController', function($scope, $http, $cookieStore) {
     		$scope.message = 'You are already in the game as ' + $cookieStore.get('gameInfo').userName;
     		$scope.isHost = $cookieStore.get('gameInfo').isHost;
     		$scope.loginSuccess = $cookieStore.get('gameInfo').loginSuccess;
+    		$scope.gameInProgress = $cookieStore.get('gameInfo').gameInProgress;
     		return;
     	}
     		
@@ -38,6 +40,7 @@ LoginApp.controller('LoginController', function($scope, $http, $cookieStore) {
     				$scope.gameInfo.isHost = true;
     			} else if (data.indexOf('game in progress') > -1) {
     				$scope.gameInProgress = true;
+    				$scope.gameInfo.gameInProgress = $scope.gameInProgress;
     			}
         		$scope.message = data;
         		$scope.loginSuccess = true;

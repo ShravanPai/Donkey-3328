@@ -25,7 +25,8 @@
 	<button ng-click = "endGame()" ng-show="isHost">End Game</button>
 </div>
 	<pre>{{ message }}</pre>
- 	<p> <button data-ng-show="gameInProgress" data-ng-click="join()">Join</button></p>
+ 	<p> <button data-ng-show="gameInProgress && !loginSuccess" data-ng-click="join()">Join</button></p>
+ 	<p> <button data-ng-show="gameInProgress && !isHost && loginSuccess" data-ng-click="endGame()">Leave Game</button></p>
 </div>
 </body>
 </html>
