@@ -3,13 +3,14 @@
 
 <head>
 <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.3.14/angular.min.js"></script>
+<script src="//ajax.googleapis.com/ajax/libs/angularjs/1.3.0-beta.1/angular-cookies.min.js"></script>
 <script type="text/javascript" src="scripts/Login.js"></script>
 </head>
 
 <body bgcolor="#E4DDA5" data-ng-app="LoginApp">
 
 <center><h1> Welcome to Donkey, a card game </h1></center>
-<div align="center" data-ng-app="LoginApp" data-ng-controller="LoginController">
+<div align="center" data-ng-app="LoginApp" data-ng-controller="LoginController" data-ng-init="initParams()">
 <div align="right">
 <h4>
 <a href="" data-ng-click="instructions()">Instructions</a>
@@ -17,7 +18,7 @@
 </div>
 <div data-ng-hide="loginSuccess">
  	<p>Username: <input type="text" data-ng-model="userName"></p>
- 	<button data-ng-click="login()">Join</button>
+ 	<button data-ng-click="login()">Login</button>
  </div>
 <div ng-show="loginSuccess">
 	<p> <img src="images/deck.jpg" alt="deck" width="128" height="128"> </p>
