@@ -73,6 +73,10 @@ public class DonkeyPlatform implements Platform {
 		players.put(playerName, new CardPlayer(playerName));
 	}
 
+	// removing a player from the table
+	public void removePlayer(String playerName) {
+		players.remove(playerName);
+	}
 	// get all the player object table
 	public Map<String, CardPlayer> getPlayerMap() {
 		return players;

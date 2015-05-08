@@ -14,5 +14,6 @@ public interface Platform {
 	void clearPlatformParameters();
 	
 	public void addPlayer(String playerName);
+	public void removePlayer(String playerName);
 	public Map<String, CardPlayer> getPlayerMap();
 }

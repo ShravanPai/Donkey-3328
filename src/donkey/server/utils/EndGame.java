@@ -18,7 +18,7 @@ public class EndGame {
 	private String endGame() {
 		Data.host = "";
 		Data.numberOfPlayers = 0;
-		Data.playerIPs.clear();
+		Data.sessionInfo.clear();
 		Data.platform.clearPlatformParameters();
 		return "Successfully ended this game";
 	}
