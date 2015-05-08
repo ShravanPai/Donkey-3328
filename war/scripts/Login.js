@@ -36,12 +36,14 @@ LoginApp.controller('LoginController', function($scope, $http, $cookieStore) {
     				$scope.message = data;
     				return;
     			} else if (data.indexOf('you are the host') > -1) {
+    				// User message and session number will be separated by a period
     				var joinMessage = data.split(".");
     				$scope.gameInfo.sessionNumber = joinMessage[1];
     				$scope.message = joinMessage[0];
     				$scope.isHost = true;
     				$scope.gameInfo.isHost = true;
     			} else if (data.indexOf('game is in progress') > -1) {
+    				// User message and session number will be separated by a period
     				var joinMessage = data.split(".");
     				$scope.gameInfo.sessionNumber = joinMessage[1];
     				$scope.message = joinMessage[0];
