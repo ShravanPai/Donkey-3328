@@ -33,7 +33,7 @@ LoginApp.controller('LoginController', function($scope, $http, $cookieStore) {
     		return;
     	}
     		
-      $http.get('http://localhost:8080/game/hello/'+$scope.userName+'/').
+      $http.get('http://donkey-3328.appsopt.com/game/hello/'+$scope.userName+'/').
     		success(function(data) {
     			if (data.indexOf('Please select a unique name') > -1) {
     				$scope.message = data;
@@ -69,7 +69,7 @@ LoginApp.controller('LoginController', function($scope, $http, $cookieStore) {
         	});
     };
     $scope.endGame = function() {
-    	$http.get('http://localhost:8080/game/end_game/').
+    	$http.get('http://donkey-3328.appsopt.com/game/end_game/').
 		success(function(data) {
 			$cookieStore.remove('gameInfo');
 			$scope.message = data;
@@ -82,7 +82,7 @@ LoginApp.controller('LoginController', function($scope, $http, $cookieStore) {
     	});
     };
     $scope.leaveGame = function() {
-    	$http.get('http://localhost:8080/game/leave_game/' + $cookieStore.get('gameInfo').sessionNumber).
+    	$http.get('http://donkey-3328.appsopt.com/game/leave_game/' + $cookieStore.get('gameInfo').sessionNumber).
 		success(function(data) {
 			$cookieStore.remove('gameInfo');
 			$scope.loginSuccess = false;
@@ -96,7 +96,7 @@ LoginApp.controller('LoginController', function($scope, $http, $cookieStore) {
     };    
     // TODO : Use post method to fetch data instead of get
     $scope.instructions = function() {
-    	$http.get('http://localhost:8080/game/instructions/').
+    	$http.get('http://donkey-3328.appsopt.com/game/instructions/').
 		success(function(data) {
 			alert(data);
 		}).
@@ -111,7 +111,7 @@ LoginApp.controller('LoginController', function($scope, $http, $cookieStore) {
     		return;
     	}
     	
-    	$http.get('http://localhost:8080/game/report_bug/' + $scope.bugReporterName + '~' + $scope.bugDescription + '/').
+    	$http.get('http://donkey-3328.appsopt.com/game/report_bug/' + $scope.bugReporterName + '~' + $scope.bugDescription + '/').
 		success(function(data) {
 			$scope.message = data;
 	    	$scope.reportBug = false;
