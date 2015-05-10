@@ -64,7 +64,7 @@ public class Hello {
 			return "Welcome " + userName + ", you are the host." + sessionNumber;
 		else
 			return "Welcome " + userName + ", a game is in progress/waiting players to join " + System.lineSeparator()
-					+ "Your host is : " + getGameHostName()
+					+ "Host : " + getGameHostName()
 					+ System.lineSeparator() + "Players : " + System.lineSeparator()
 					+ getPlayerNames() + "." + sessionNumber;
 	}
