@@ -22,6 +22,7 @@
 			<p> Your name: <input type="text" data-ng-model="bugReporterName"> </p>
 			<p> Bug Description: <textarea rows="4" cols="50" data-ng-model="bugDescription"> </textarea></p>
 			<button data-ng-click="fileBug()">Report</button>
+			<button data-ng-click="reportBug = false">Cancel</button>
 		</div>
 		
 		<div data-ng-hide="loginSuccess || reportBug">
