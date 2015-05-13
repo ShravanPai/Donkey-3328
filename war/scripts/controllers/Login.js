@@ -1,6 +1,6 @@
 var LoginApp = angular.module('LoginApp',['ngCookies']);
   
-LoginApp.controller('LoginController', function($scope, $http, $cookieStore) {
+LoginApp.controller('LoginController', function($scope, $http, $cookieStore, $interval) {
 	$scope.message = '';
 	$scope.userName = '';
 	$scope.loginSuccess = false;
@@ -11,6 +11,8 @@ LoginApp.controller('LoginController', function($scope, $http, $cookieStore) {
 	$scope.reportBug = false;
 	$scope.bugDescription = '';
 	$scope.bugReporterName = '';
+	var timer;
+	var counter = 0;
 	$scope.initParams = function() {
     	if (!angular.isUndefined($cookieStore.get('gameInfo'))) {
     		$scope.message = 'You are already in the game as ' + $cookieStore.get('gameInfo').userName;
@@ -46,6 +48,10 @@ LoginApp.controller('LoginController', function($scope, $http, $cookieStore) {
     				$scope.isHost = true;
     				$scope.gameInfo.isHost = true;
     				$scope.gameInfo.gameHost = 'You';
+    				// Start the timer to poll for the players
+    			   	timer = $interval(function() {
+    			   		pollPlayers();
+    			    	}, 1000)
     			} else if (data.indexOf('game is in progress') > -1) {
     				// User message and session number will be separated by a period
     				var joinMessage = data.split(".");
@@ -80,6 +86,12 @@ LoginApp.controller('LoginController', function($scope, $http, $cookieStore) {
     	error(function(data, status, headers, config){
     		$scope.message = 'Error in getting response : ' + data;
     	});
+    	
+    	// Remove this timer once we get the logic right
+    	if (angular.isDefined(timer)) {
+    		$interval.cancel(timer);
+    		timer = undefined;
+    	}
     };
     $scope.leaveGame = function() {
     	$http.get('http://donkey-3328.appspot.com/game/leave_game/' + $cookieStore.get('gameInfo').sessionNumber).
@@ -126,5 +138,23 @@ LoginApp.controller('LoginController', function($scope, $http, $cookieStore) {
     
     $scope.activateReportBugForm = function() {
     	$scope.reportBug = true;
-    }
+    };
+    
+    $scope.startGame = function() {
+    	if (angular.isDefined(timer)) {
+    		$interval.cancel(timer);
+    		timer = undefined;
+    	}
+    		
+    };
+    
+    var pollPlayers = function() {
+      	$http.get('http://donkey-3328.appspot.com/game/poll_players/').
+		success(function(data) {
+			$scope.playerList = data;
+		}).
+    	error(function(data, status, headers, config){
+    		return 'Error Polling Players';
+    	});
+    };
 });

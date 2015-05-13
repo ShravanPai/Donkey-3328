@@ -15,28 +15,65 @@
 	<center>
 		<h1>Welcome to Donkey, a card game</h1>
 	</center>
-	<div align="center" data-ng-app="LoginApp" data-ng-controller="LoginController" data-ng-init="initParams()">
+	<div align="center" data-ng-app="LoginApp"
+		data-ng-controller="LoginController" data-ng-init="initParams()">
 		<a href="" data-ng-click="instructions()">Instructions</a>
-		<p><button data-ng-hide="reportBug" ng-click="activateReportBugForm()" style="float: right;">Report Bug</button></p>
+		<p>
+			<button data-ng-hide="reportBug" ng-click="activateReportBugForm()"
+				style="float: right;">Report Bug</button>
+		</p>
 		<div align="center" data-ng-show="reportBug">
-			<p> Your name: <input type="text" data-ng-model="bugReporterName"> </p>
-			<p> Bug Description: <textarea rows="4" cols="50" data-ng-model="bugDescription"> </textarea></p>
+			<p>
+				Your name: <input type="text" data-ng-model="bugReporterName">
+			</p>
+			<p>
+				Bug Description:
+				<textarea rows="4" cols="50" data-ng-model="bugDescription"> </textarea>
+			</p>
 			<button data-ng-click="fileBug()">Report</button>
 			<button data-ng-click="reportBug = false">Cancel</button>
 		</div>
-		
+
+		<!-- Hide the Username entry text field upon login -->
 		<div data-ng-hide="loginSuccess || reportBug">
-			<p> Username: <input type="text" data-ng-model="userName"></p>
+			<p>
+				Username: <input type="text" data-ng-model="userName">
+			</p>
 			<button data-ng-click="login()">Login</button>
 		</div>
 		<pre>{{ message }}</pre>
+		<!-- If login is success, then show the necessary buttons -->
 		<div ng-show="loginSuccess">
-			<p><img src="images/deck.jpg" alt="deck" width="128" height="128"></p>
+			<p> <img src="images/deck.jpg" alt="deck" width="128" height="128"> </p>
 			<button ng-click="endGame()" ng-show="isHost">End Game</button>
-			<p><button data-ng-show="!isHost && gameInProgress" data-ng-click="leaveGame()">Leave Game</button></p>
+			<button data-ng-show="!isHost && gameInProgress" data-ng-click="leaveGame()">Leave Game</button>
+			<button data-ng-show="isHost" data-ng-click="startGame()">Start Game</button>
 		</div>
 		<div align="left" ng-show="loginSuccess">
-			{{playerList}}
+			<table border="1">
+			<col width="50">
+			<col width="100">
+				<tr>
+					<th width="200"> <h2> Player List </h2>
+					</th>
+					<th width="800">
+						<h2>Play Area!!</h2>
+					</th>
+				</tr>
+<!--  Main game logic display would go here for now -->
+				<tr>
+					<td>
+						<pre>{{playerList}}</pre>	
+					</td>
+					<td>
+					</td>
+				</tr>
+
+
+
+
+
+			</table>
 		</div>
 	</div>
 </body>

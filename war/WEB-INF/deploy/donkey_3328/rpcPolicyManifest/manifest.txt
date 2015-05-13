@@ -1,2 +1,3 @@
 # Module donkey_3328
 # RPC service class, partial path of RPC policy file
+donkey.client.GreetingService, A5D31C55025C67231D542EF44DD6412B.gwt.rpc
