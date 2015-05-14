@@ -66,8 +66,8 @@
 						<pre>{{playerList}}</pre>	
 					</td>
 					<td>
-						<div ng-repeat="number in cardNumbers" >
-							<img ng-src="{{getImagePath(number)}}" height="75" width="75"/>
+						<div ng-repeat="number in cardNumbers | orderBy" >
+							<img ng-src="{{getImagePath(number)}}" ng-click="cardSelected(number)" height="75" width="75"/>
 						</div>
 					
 					</td>

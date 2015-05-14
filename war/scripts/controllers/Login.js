@@ -11,6 +11,7 @@ LoginApp.controller('LoginController', function($scope, $http, $cookieStore, $in
 	$scope.reportBug = false;
 	$scope.bugDescription = '';
 	$scope.bugReporterName = '';
+	$scope.selectedCardNumber = '';
 	$scope.cardNumbers = [];
 	var timer;
 	var gameStatePollingTimer;
@@ -164,7 +165,7 @@ LoginApp.controller('LoginController', function($scope, $http, $cookieStore, $in
     	}
       	$http.get('http://donkey-3328.appspot.com/game/start_game/').
 		success(function(data) {
-			console.log('Game Started : ' + data);
+			$scope.message(data);
 		}).
     	error(function(data, status, headers, config){
     		return 'Error Starting Game';
@@ -175,8 +176,11 @@ LoginApp.controller('LoginController', function($scope, $http, $cookieStore, $in
     	var path = 'images/cards/';
     	path += number;
     	path+='.png';
-    	console.log('Path : ' + path);
     	return path;
+    };
+    
+    $scope.cardSelected = function(number) {
+    	$scope.message = 'Card ' + $scope.getImagePath(number) + ' selected';
     };
     
     var pollPlayers = function() {
