@@ -16,4 +16,6 @@ public interface Platform {
 	public void addPlayer(String playerName);
 	public void removePlayer(String playerName);
 	public Map<String, CardPlayer> getPlayerMap();
+	public List<Integer> getCardsForPlayer(String playerName);
+	public List<PlayCard> getCurrentPlayCards();
 }

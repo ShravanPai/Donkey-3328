@@ -1,8 +1,8 @@
 package donkey.server.utils;
 
 import java.util.ArrayList;
-import java.util.Hashtable;
 import java.util.Iterator;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
@@ -139,4 +139,18 @@ public class DonkeyPlatform implements Platform {
 		this.deck = null;
 		this.players.clear();
 	}
+	
+	public List<Integer> getCardsForPlayer(String playerName) {
+		Map<String, CardPlayer> playerMap = getPlayerMap();
+		CardPlayer player = playerMap.get(playerName);
+		List<PlayCard> cards = player.getPlayerCards();
+		Iterator<PlayCard> cardIterator = cards.iterator();
+		List<Integer> cardNumbers = new LinkedList<Integer>();
+		
+		while (cardIterator.hasNext())
+			cardNumbers.add(cardIterator.next().getCardValue());
+		
+		return cardNumbers;
+	}
+	
 }

@@ -11,7 +11,9 @@ LoginApp.controller('LoginController', function($scope, $http, $cookieStore, $in
 	$scope.reportBug = false;
 	$scope.bugDescription = '';
 	$scope.bugReporterName = '';
+	$scope.cardNumbers = [];
 	var timer;
+	var gameStatePollingTimer;
 	var counter = 0;
 	$scope.initParams = function() {
     	if (!angular.isUndefined($cookieStore.get('gameInfo'))) {
@@ -69,12 +71,19 @@ LoginApp.controller('LoginController', function($scope, $http, $cookieStore, $in
         		$scope.loginSuccess = true;
         		$scope.gameInfo.loginSuccess = true;
         		$cookieStore.put('gameInfo', $scope.gameInfo);
-        	}).
+        		gameStatePollingTimer = $interval(function() {
+        			startPollingForGameInfo();
+        		}, 2000)
+    		}).
         	error(function(data, status, headers, config){
         		$scope.message = 'Error in getting response : ' + data;
         	});
     };
     $scope.endGame = function() {
+    	if (angular.isDefined(gameStatePollingTimer)) {
+    		$interval.cancel(gameStatePollingTimer);
+    		gameStatePollingTimer = undefined;
+    	}
     	$http.get('http://donkey-3328.appspot.com/game/end_game/').
 		success(function(data) {
 			$cookieStore.remove('gameInfo');
@@ -105,6 +114,14 @@ LoginApp.controller('LoginController', function($scope, $http, $cookieStore, $in
     	error(function(data, status, headers, config){
     		$scope.message = 'Error in getting response : ' + data;
     	});
+    	
+    	// TODO : Remove this from here 
+		$cookieStore.remove('gameInfo');
+		$scope.loginSuccess = false;
+		$scope.gameInProgress = false;
+		$scope.message = data;
+		$scope.isHost = false;
+    	
     };    
     // TODO : Use post method to fetch data instead of get
     $scope.instructions = function() {
@@ -145,7 +162,21 @@ LoginApp.controller('LoginController', function($scope, $http, $cookieStore, $in
     		$interval.cancel(timer);
     		timer = undefined;
     	}
-    		
+      	$http.get('http://donkey-3328.appspot.com/game/start_game/').
+		success(function(data) {
+			console.log('Game Started : ' + data);
+		}).
+    	error(function(data, status, headers, config){
+    		return 'Error Starting Game';
+    	});    	
+    };
+    
+    $scope.getImagePath = function(number) {
+    	var path = 'images/cards/';
+    	path += number;
+    	path+='.png';
+    	console.log('Path : ' + path);
+    	return path;
     };
     
     var pollPlayers = function() {
@@ -155,6 +186,23 @@ LoginApp.controller('LoginController', function($scope, $http, $cookieStore, $in
 		}).
     	error(function(data, status, headers, config){
     		return 'Error Polling Players';
+    	});
+    };
+    
+    var startPollingForGameInfo = function() {
+      	$http.get('http://donkey-3328.appspot.com/game/get_game_state/' + $scope.userName).
+		success(function(data) {			
+			// TODO : Change this to form necessary variables
+			if (data.indexOf('Cards') > -1) {
+				var dataArray = data.split(':');
+				var myCards = dataArray[1].trim();
+				$scope.cardNumbers = myCards.split(',');
+				$scope.cardNumbers.pop();
+			}
+			
+		}).
+    	error(function(data, status, headers, config){
+    		return 'Error Polling Game State';
     	});
     };
 });

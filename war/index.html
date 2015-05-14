@@ -57,7 +57,7 @@
 					<th width="200"> <h2> Player List </h2>
 					</th>
 					<th width="800">
-						<h2>Play Area!!</h2>
+						<h2>Your Area!!</h2>
 					</th>
 				</tr>
 <!--  Main game logic display would go here for now -->
@@ -66,12 +66,12 @@
 						<pre>{{playerList}}</pre>	
 					</td>
 					<td>
+						<div ng-repeat="number in cardNumbers" >
+							<img ng-src="{{getImagePath(number)}}" height="75" width="75"/>
+						</div>
+					
 					</td>
 				</tr>
-
-
-
-
 
 			</table>
 		</div>

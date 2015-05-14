@@ -37,8 +37,7 @@ public class PlayingDeck implements Deck {
 	// Create cards for this Deck
 	private void createCards() {
 		cardsInDeck = new ArrayList<PlayCard>();
-		for (int i = 1; i <= Constants.NUMBER_OF_SUITES; i++)
-			for (int j = 1; j <= Constants.NUMBER_OF_CARDS_IN_SUITE; j++)
-				cardsInDeck.add(new PlayCard(j, i));
+		for (int i = 1; i <= Constants.NUMBER_OF_CARDS; i++)
+			cardsInDeck.add(new PlayCard(i));
 	}
 }

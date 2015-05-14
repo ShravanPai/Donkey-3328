@@ -8,8 +8,8 @@ public class PlayCard implements Card {
 	private int suite;
 	private int cardValue;
 
-	public PlayCard(int cardValue, int suite) {
-		this.suite     = suite;
+	public PlayCard(int cardValue) {
+		//this.suite     = suite;
 		this.cardValue = cardValue;
 	}
 
