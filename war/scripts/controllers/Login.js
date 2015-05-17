@@ -13,6 +13,8 @@ LoginApp.controller('LoginController', function($scope, $http, $cookieStore, $in
 	$scope.bugReporterName = '';
 	$scope.selectedCardNumber = '';
 	$scope.cardNumbers = [];
+	$scope.cardsOnPlatform = [];
+	$scope.cardSelected = '';
 	var timer;
 	var gameStatePollingTimer;
 	var counter = 0;
@@ -179,8 +181,19 @@ LoginApp.controller('LoginController', function($scope, $http, $cookieStore, $in
     };
     
     $scope.cardSelected = function(number) {
+    	$scope.selectedCard = number;
     	$scope.message = 'Card ' + $scope.getImagePath(number) + ' selected';
     };
+    
+    $scope.playCard = function() {
+      	$http.get('http://donkey-3328.appspot.com/game/play/' + $scope.userName + '/' + $scope.selectedCard + '/').
+		success(function(data) {
+			$scope.playerList = data;
+		}).
+    	error(function(data, status, headers, config){
+    		return 'Error Polling Players';
+    	});
+    }
     
     var pollPlayers = function() {
       	$http.get('http://donkey-3328.appspot.com/game/poll_players/').
@@ -196,11 +209,14 @@ LoginApp.controller('LoginController', function($scope, $http, $cookieStore, $in
       	$http.get('http://donkey-3328.appspot.com/game/get_game_state/' + $scope.userName).
 		success(function(data) {			
 			// TODO : Change this to form necessary variables
-			if (data.indexOf('Cards') > -1) {
+			if (data.indexOf(':') > -1) {
 				var dataArray = data.split(':');
 				var myCards = dataArray[1].trim();
+				var platFormCards = dataArray[0].trim();
 				$scope.cardNumbers = myCards.split(',');
 				$scope.cardNumbers.pop();
+				$scope.cardsOnPlatform = platFormCards.split(',');
+				$scope.cardsOnPlatform.pop();
 			}
 			
 		}).

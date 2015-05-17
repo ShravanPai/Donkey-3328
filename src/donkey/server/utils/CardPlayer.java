@@ -42,4 +42,5 @@ public class CardPlayer extends Person implements Player{
 	public String getPlayerName() {
 		return getName();
 	}
+	
 }

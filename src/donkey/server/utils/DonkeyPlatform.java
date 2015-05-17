@@ -16,6 +16,7 @@ public class DonkeyPlatform implements Platform {
 
 	private List<PlayCard> currentPlayCards = new ArrayList<PlayCard>();
 	private List<PlayCard> passedPlayCards = new ArrayList<PlayCard>();
+	private List<PlayCard> cardsOnPlatform = new ArrayList<PlayCard>();
 	private PlayingDeck deck;
 	private Map<String, CardPlayer> players = new TreeMap<String, CardPlayer>();
 
@@ -124,8 +125,16 @@ public class DonkeyPlatform implements Platform {
 		cards.clear();
 	}
 	
-	public void playCard() {
-		// TODO : logic to play card and collect cards on platform
+	public void addCardsToPassedList(PlayCard card) {
+		cardsOnPlatform.add(card);
+	}
+	
+	public void passCardsOnPlatform() {
+		PlayCard card;
+		while (cardsOnPlatform.size() >= 0) {
+			card = cardsOnPlatform.remove(0);
+			passedPlayCards.add(card);
+		}
 	}
 	
 	// Resets all the parameters
@@ -150,6 +159,29 @@ public class DonkeyPlatform implements Platform {
 		while (cardIterator.hasNext())
 			cardNumbers.add(cardIterator.next().getCardValue());
 		
+		return cardNumbers;
+	}
+	
+	public void playCard(String userName, int cardNumber) {
+		Map<String, CardPlayer> map = getPlayerMap();
+		CardPlayer cardPlayer = map.get(userName);
+		List<PlayCard> cards = cardPlayer.getPlayerCards();
+		Iterator<PlayCard> iterator = cards.iterator();
+		PlayCard card;
+		while (iterator.hasNext()) {
+			card = iterator.next();
+			if (cardNumber == card.getCardValue()) {
+				cards.remove(card);
+				addCardsToPassedList(card);
+				break;
+			}
+		}
+	}
+	
+	public List<Integer> getCardNumbersOnPlatform() {
+		List<Integer> cardNumbers = new ArrayList<Integer>();
+		for (int i = 0 ; i < cardsOnPlatform.size(); i++)
+			cardNumbers.add(cardsOnPlatform.get(i).getCardValue());
 		return cardNumbers;
 	}
 	

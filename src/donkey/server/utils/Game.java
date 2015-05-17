@@ -24,13 +24,17 @@ public class Game {
 		// cards
 		try {
 			Data.platformDataLock.lock();
-			List<Integer> cardNumbers = Data.platform
-					.getCardsForPlayer(userName);
 			StringBuilder builder = new StringBuilder();
-			Iterator<Integer> iterator = cardNumbers.iterator();
-			if (cardNumbers.size() > 0)
-				builder.append("Cards:");
 
+			List<Integer> cardsOnPlatform = Data.platform.getCardNumbersOnPlatform();
+			Iterator<Integer> platformIterator = cardsOnPlatform.iterator();
+			while (platformIterator.hasNext()) {
+				builder.append(platformIterator.next().toString());
+				builder.append(",");
+			}
+			builder.append(":");
+			List<Integer> cardNumbers = Data.platform.getCardsForPlayer(userName);
+			Iterator<Integer> iterator = cardNumbers.iterator();
 			while (iterator.hasNext()) {
 				builder.append(iterator.next().toString());
 				builder.append(",");

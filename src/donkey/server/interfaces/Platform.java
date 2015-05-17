@@ -18,4 +18,6 @@ public interface Platform {
 	public Map<String, CardPlayer> getPlayerMap();
 	public List<Integer> getCardsForPlayer(String playerName);
 	public List<PlayCard> getCurrentPlayCards();
+	public void playCard(String userName, int cardValue);
+	public List<Integer> getCardNumbersOnPlatform();
 }
