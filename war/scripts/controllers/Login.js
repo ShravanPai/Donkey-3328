@@ -120,7 +120,6 @@ LoginApp.controller('LoginController', function($scope, $http, $cookieStore, $in
 		$cookieStore.remove('gameInfo');
 		$scope.loginSuccess = false;
 		$scope.gameInProgress = false;
-		$scope.message = data;
 		$scope.isHost = false;
     	
     };    
@@ -165,7 +164,7 @@ LoginApp.controller('LoginController', function($scope, $http, $cookieStore, $in
     	}
       	$http.get('http://donkey-3328.appspot.com/game/start_game/').
 		success(function(data) {
-			$scope.message(data);
+			$scope.message = data;
 		}).
     	error(function(data, status, headers, config){
     		return 'Error Starting Game';

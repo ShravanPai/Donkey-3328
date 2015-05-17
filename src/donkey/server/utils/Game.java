@@ -17,21 +17,29 @@ public class Game {
 	public String getGameInfoForPlayer(@PathParam("userName") String userName) {
 		return getGameStateForPlayer(userName);
 	}
-	
+
 	private String getGameStateForPlayer(String userName) {
-		
-		// TODO : Add cards that are on platform before appending the player's cards
-		List<Integer> cardNumbers = Data.platform.getCardsForPlayer(userName);
-		StringBuilder builder = new StringBuilder();
-		Iterator<Integer> iterator = cardNumbers.iterator();
-		if (cardNumbers.size() > 0)
-			builder.append("Cards:");
-		
-		while (iterator.hasNext()) {
-			builder.append(iterator.next().toString());
-			builder.append(",");
+
+		// TODO : Add cards that are on platform before appending the player's
+		// cards
+		try {
+			Data.platformDataLock.lock();
+			List<Integer> cardNumbers = Data.platform
+					.getCardsForPlayer(userName);
+			StringBuilder builder = new StringBuilder();
+			Iterator<Integer> iterator = cardNumbers.iterator();
+			if (cardNumbers.size() > 0)
+				builder.append("Cards:");
+
+			while (iterator.hasNext()) {
+				builder.append(iterator.next().toString());
+				builder.append(",");
+			}
+			return builder.toString();
+		} catch (Exception e) {
+			return "Game was already ended by your host";
+		} finally {
+			Data.platformDataLock.unlock();
 		}
-		
-		return builder.toString();
 	}
 }

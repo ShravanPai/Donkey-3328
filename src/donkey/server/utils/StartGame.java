@@ -14,10 +14,18 @@ public class StartGame {
 	@GET
 	@Produces(MediaType.TEXT_PLAIN)
 	public String startGame() {
+		
+		try {
+		Data.platformDataLock.lock();
 		List<PlayCard> cards = Data.platform.getCurrentPlayCards();
 		Data.platform.shuffleCards(cards);
 		Data.platform.distributeCards(cards, numberOfCards);
 		return "Game Started!!";
+		} catch (Exception e) {
+			return "Unable to read game data";
+		} finally {
+			Data.platformDataLock.unlock();
+		}
 	}
 	
 }

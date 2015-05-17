@@ -19,10 +19,16 @@ public class LeaveGame {
 	
 	private String endMyGame(int sessionNumber) {
 		String playerName = Data.sessionInfo.get(sessionNumber);
-		Data.platform.removePlayer(playerName);
-		Data.sessionInfo.remove(sessionNumber);
-		
+		try {
+			Data.platformDataLock.lock();
+			Data.platform.removePlayer(playerName);
+			Data.sessionInfo.remove(sessionNumber);
 		// TODO : Remove player from platform
 		return "Succesfully left the game";
+		} catch (Exception e) {
+			return "Successfuddly left the game";
+		} finally {
+			Data.platformDataLock.unlock();
+		}
 	}
 }

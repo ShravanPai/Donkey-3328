@@ -19,7 +19,8 @@ public class EndGame {
 		Data.host = "";
 		Data.numberOfPlayers = 0;
 		Data.sessionInfo.clear();
-		Data.platform.clearPlatformParameters();
+		Data.platform = null;
+		Data.platformDataLock = null;
 		return "Successfully ended this game";
 	}
 }

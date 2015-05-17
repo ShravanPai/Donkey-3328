@@ -9,14 +9,13 @@ package donkey.server.utils;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
+import java.util.concurrent.locks.ReentrantLock;
 
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
-
-import com.google.gson.Gson;
 
 @Path("/hello/{userName}/")
 public class Hello {
@@ -25,19 +24,20 @@ public class Hello {
 	@GET
 	@Produces(MediaType.TEXT_PLAIN)
 	public String sayPlainTextHello(@PathParam("userName") String userName) {
-		
+
 		// If userName already exists in the game
 		if (!isUniqueUserName(userName))
 			return "Please select a unique name";
-		
+
 		int newSessionNumber = Data.numberOfPlayers;
 		Data.numberOfPlayers++;
 		String returnString = addPlayerAndCreateGame(userName, newSessionNumber);
 		return returnString;
 	}
-	
+
 	private boolean isGameHost(int sessionNumber) {
-		// TODO : Host can be any number and not only zero. Add this functionality
+		// TODO : Host can be any number and not only zero. Add this
+		// functionality
 		if (sessionNumber == 0)
 			return true;
 		return false;
@@ -47,7 +47,7 @@ public class Hello {
 	private String getGameHostName() {
 		return Data.sessionInfo.get(0);
 	}
-	
+
 	private boolean isUniqueUserName(String userName) {
 		userName = userName.trim();
 		userName = userName.toLowerCase();
@@ -56,19 +56,33 @@ public class Hello {
 				return false;
 		return true;
 	}
-	
+
 	private String addPlayerAndCreateGame(String userName, int sessionNumber) {
 		Data.sessionInfo.put(sessionNumber, userName);
-		Data.platform.addPlayer(userName);
-		if (isGameHost(sessionNumber))
-			return "Welcome " + userName + ", you are the host." + sessionNumber;
-		else
-			return "Welcome " + userName + ", a game is in progress/waiting players to join " + System.lineSeparator()
-					+ "Host : " + getGameHostName()
-					+ System.lineSeparator() + "Players : " + System.lineSeparator()
-					+ getPlayerNames() + "." + sessionNumber;
+		if (isGameHost(sessionNumber)) {
+			Data.platformDataLock = new ReentrantLock(true);
+			Data.platform = new DonkeyPlatform();
+			Data.platform.addPlayer(userName);
+			return "Welcome " + userName + ", you are the host."
+					+ sessionNumber;
+		} else {
+			try {
+				Data.platformDataLock.lock();
+				Data.platform.addPlayer(userName);
+				return "Welcome " + userName
+						+ ", a game is in progress/waiting players to join "
+						+ System.lineSeparator() + "Host : "
+						+ getGameHostName() + System.lineSeparator()
+						+ "Players : " + System.lineSeparator()
+						+ getPlayerNames() + "." + sessionNumber;
+			} catch (Exception e) {
+				return "Could not add you to this platform sorry!!";
+			} finally {
+				Data.platformDataLock.unlock();
+			}
+		}
 	}
-	
+
 	private String getPlayerNames() {
 		StringBuilder playersAsString = new StringBuilder();
 		Set<String> players = Data.platform.getPlayerMap().keySet();
