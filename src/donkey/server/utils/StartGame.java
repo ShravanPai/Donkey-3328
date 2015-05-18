@@ -17,6 +17,7 @@ public class StartGame {
 		
 		try {
 		Data.platformDataLock.lock();
+		Data.nextPlayerSessionNumber = 0;
 		List<PlayCard> cards = Data.platform.getCurrentPlayCards();
 		Data.platform.shuffleCards(cards);
 		Data.platform.distributeCards(cards, numberOfCards);

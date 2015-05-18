@@ -12,7 +12,7 @@ public class Data {
 
 	public static int numberOfPlayers = 0;
 	public static String host = null;
-	
+	public static int nextPlayerSessionNumber;
 
 	public static Map<Integer, String> sessionInfo = new TreeMap<Integer, String>();
 	public static Platform platform;

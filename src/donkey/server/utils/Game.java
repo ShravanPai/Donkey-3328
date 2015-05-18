@@ -39,6 +39,11 @@ public class Game {
 				builder.append(iterator.next().toString());
 				builder.append(",");
 			}
+			
+			String nextPlayerName = Data.sessionInfo.get(Data.nextPlayerSessionNumber);
+			builder.append(":");
+			builder.append(nextPlayerName);
+			
 			return builder.toString();
 		} catch (Exception e) {
 			return "Game was already ended by your host";

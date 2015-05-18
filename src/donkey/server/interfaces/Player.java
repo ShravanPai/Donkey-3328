@@ -8,4 +8,5 @@ public interface Player {
 	Card getCard(int position);
 	void arrangeCards();
 	String getPlayerName();
+	boolean hasCardsLeft();
 }

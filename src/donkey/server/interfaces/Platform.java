@@ -20,4 +20,6 @@ public interface Platform {
 	public List<PlayCard> getCurrentPlayCards();
 	public void playCard(String userName, int cardValue);
 	public List<Integer> getCardNumbersOnPlatform();
+	public void passCardsOnPlatform();
+	public void passCardsOnPlatformToPlayer(String userName);
 }

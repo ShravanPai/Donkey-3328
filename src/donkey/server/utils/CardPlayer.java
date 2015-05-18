@@ -43,4 +43,9 @@ public class CardPlayer extends Person implements Player{
 		return getName();
 	}
 	
+	public boolean hasCardsLeft() {
+		if (getPlayerCards().size() == 0)
+			return false;
+		return true;
+	}
 }

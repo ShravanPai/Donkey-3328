@@ -185,4 +185,14 @@ public class DonkeyPlatform implements Platform {
 		return cardNumbers;
 	}
 	
+	public void passCardsOnPlatformToPlayer(String userName) {
+		Map<String, CardPlayer> playerMap = getPlayerMap();
+		CardPlayer player = playerMap.get(userName.trim());		
+		PlayCard card;
+		
+		while (cardsOnPlatform.size() >= 0) {
+			card = cardsOnPlatform.remove(0);
+			player.addCard(card);
+		}
+	}
 }

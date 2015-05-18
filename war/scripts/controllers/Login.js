@@ -7,7 +7,7 @@ LoginApp.controller('LoginController', function($scope, $http, $cookieStore, $in
 	$scope.gameInProgress = false;
 	$scope.isHost = false;
 	$scope.gameInfo = {};
-	$scope.playerList = '';
+	$scope.playerList = [];
 	$scope.reportBug = false;
 	$scope.bugDescription = '';
 	$scope.bugReporterName = '';
@@ -15,6 +15,7 @@ LoginApp.controller('LoginController', function($scope, $http, $cookieStore, $in
 	$scope.cardNumbers = [];
 	$scope.cardsOnPlatform = [];
 	$scope.cardSelected = '';
+	$scope.nextPlayer = '';
 	var timer;
 	var gameStatePollingTimer;
 	var counter = 0;
@@ -54,9 +55,7 @@ LoginApp.controller('LoginController', function($scope, $http, $cookieStore, $in
     				$scope.gameInfo.isHost = true;
     				$scope.gameInfo.gameHost = 'You';
     				// Start the timer to poll for the players
-    			   	timer = $interval(function() {
-    			   		pollPlayers();
-    			    	}, 1000)
+
     			} else if (data.indexOf('game is in progress') > -1) {
     				// User message and session number will be separated by a period
     				var joinMessage = data.split(".");
@@ -71,6 +70,10 @@ LoginApp.controller('LoginController', function($scope, $http, $cookieStore, $in
     				$scope.gameInfo.gameInProgress = $scope.gameInProgress;
     			}
         		
+			   	timer = $interval(function() {
+			   		pollPlayers();
+			    	}, 1000)
+			    	
         		$scope.loginSuccess = true;
         		$scope.gameInfo.loginSuccess = true;
         		$cookieStore.put('gameInfo', $scope.gameInfo);
@@ -169,7 +172,7 @@ LoginApp.controller('LoginController', function($scope, $http, $cookieStore, $in
 			$scope.message = data;
 		}).
     	error(function(data, status, headers, config){
-    		return 'Error Starting Game';
+    		$scope.data = 'Error Starting Game';
     	});    	
     };
     
@@ -186,19 +189,45 @@ LoginApp.controller('LoginController', function($scope, $http, $cookieStore, $in
     };
     
     $scope.playCard = function() {
-      	$http.get('http://donkey-3328.appspot.com/game/play/' + $scope.userName + '/' + $scope.selectedCard + '/').
+    	// Stop the timer once the game has started
+    	if (angular.isDefined(timer)) {
+    		$interval.cancel(timer);
+    		timer = undefined;
+    	}
+      	$http.get('http://donkey-3328.appspot.com/game/play/' + $scope.userName + '/' + $scope.selectedCard + '/' + $scope.gameInfo.sessionNumber + '/').
 		success(function(data) {
-			$scope.playerList = data;
+			$scope.message = data;
 		}).
     	error(function(data, status, headers, config){
-    		return 'Error Polling Players';
+    		$scope.message = 'Error Polling Players';
+    	});
+    };
+    
+    $scope.passCards = function() {
+     	$http.get('http://donkey-3328.appspot.com/game/pass_cards/').
+		success(function(data) {
+			$scope.message = data;
+		}).
+    	error(function(data, status, headers, config){
+    		$scope.message = 'Error Passing Cards';
+    	});
+    };
+    
+    $scope.passCardsOnPlatformToUser = function(player) {
+    	$http.get('http://donkey-3328.appspot.com/game/pass_cards_to_player/' + player + '/').
+		success(function(data) {
+			$scope.message = data;
+		}).
+    	error(function(data, status, headers, config){
+    		return 'Error Passing cards to ' + player;
     	});
     }
     
     var pollPlayers = function() {
       	$http.get('http://donkey-3328.appspot.com/game/poll_players/').
 		success(function(data) {
-			$scope.playerList = data;
+			$scope.playerList = data.split("\n");
+			$scope.playerList.pop();
 		}).
     	error(function(data, status, headers, config){
     		return 'Error Polling Players';
@@ -209,7 +238,7 @@ LoginApp.controller('LoginController', function($scope, $http, $cookieStore, $in
       	$http.get('http://donkey-3328.appspot.com/game/get_game_state/' + $scope.userName).
 		success(function(data) {			
 			// TODO : Change this to form necessary variables
-			if (data.indexOf(':') > -1) {
+			if (data.indexOf(':') > -1) {				
 				var dataArray = data.split(':');
 				var myCards = dataArray[1].trim();
 				var platFormCards = dataArray[0].trim();
@@ -217,6 +246,9 @@ LoginApp.controller('LoginController', function($scope, $http, $cookieStore, $in
 				$scope.cardNumbers.pop();
 				$scope.cardsOnPlatform = platFormCards.split(',');
 				$scope.cardsOnPlatform.pop();
+				
+				var nextPlayer = dataArray[2].trim();
+				$scope.nextPlayer = 'Next Player --> ' + nextPlayer;
 			}
 			
 		}).
