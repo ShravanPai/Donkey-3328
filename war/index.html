@@ -42,24 +42,34 @@
 		</div>
 		<pre>{{ message }}</pre>
 		<!-- If login is success, then show the necessary buttons -->
-		<div ng-show="loginSuccess">
-			<p> <img src="images/CardBack.png" alt="deck" width="270" height="400"> </p>
-			<button ng-click="endGame()" ng-show="isHost">End Game</button>
-			<button data-ng-show="!isHost && gameInProgress" data-ng-click="leaveGame()">Leave Game</button>
-			<button data-ng-show="isHost" data-ng-click="startGame()">Start Game</button>
-		</div>
-		<div align="center" data-ng-show="loginSuccess && isHost">
-			<button data-ng-click="passCards()">Pass Cards</button>
-		</div>
 		<div align="left" data-ng-show="loginSuccess">
 			<p>{{nextPlayer}}</p>
-			<button data-ng-click="playCard()">Play Card</button>
 			<table border="1">
-			<col width="50">
-			<col width="100">
+			<tr>
+				<th width="300">  </h2>
+				<th width="200"> <h2> Player List </h2> </th>
+				<th width="500"> <h2>Controls</h2> </th>
+			</tr>
+			<tr>
+				<td><p> <img src="images/CardBack.png" alt="deck" width="150" height="250"> </p> </td>
+				<td>
+					<div data-ng-repeat="player in playerList">
+						{{player}} <button data-ng-show="isHost && loginSuccess" data-ng-click="passCardsOnPlatformToUser(player)">Pass</button>
+					</div>
+				</td>
+				<td>
+					<button ng-click="endGame()" ng-show="isHost">End Game</button>
+					<button data-ng-show="!isHost && gameInProgress" data-ng-click="leaveGame()">Leave Game</button>
+					<button data-ng-show="isHost" data-ng-click="startGame()">Start Game</button>
+					<button data-ng-click="playCard()">Play Card</button>
+					<button data-ng-show="loginSuccess && isHost" data-ng-click="passCards()">Pass Cards</button>
+				</td>
+			</tr>
+			</table>
+		</div>
+		<div align="left" data-ng-show="loginSuccess">
+			<table border="1">
 				<tr>
-					<th width="200"> <h2> Player List </h2>
-					</th>
 					<th width="500">
 						<h2>Your Area!!</h2>
 					</th>
@@ -69,11 +79,6 @@
 				</tr>
 <!--  Main game logic display would go here for now -->
 				<tr>
-					<td>
-						<div data-ng-repeat="player in playerList">
-							{{player}} <button data-ng-show="isHost && loginSuccess" data-ng-click="passCardsOnPlatformToUser(player)">Pass</button>
-						</div>
-					</td>
 					<td>
 						<div id="cardDisplay" ng-repeat="number in cardNumbers | orderBy" >
 							<img ng-src="{{getImagePath(number)}}" ng-click="cardSelected(number)" height="75" width="75"/>
