@@ -46,12 +46,12 @@
 			<p>{{nextPlayer}}</p>
 			<table border="1">
 			<tr>
-				<th width="300">  </h2>
+				<th width="300"> <h2> Selected Card </h2> </th>
 				<th width="200"> <h2> Player List </h2> </th>
 				<th width="500"> <h2>Controls</h2> </th>
 			</tr>
 			<tr>
-				<td><p> <img src="images/CardBack.png" alt="deck" width="150" height="250"> </p> </td>
+				<td><p> <img src="{{getDisplayCard()}}" alt="deck" width="150" height="250" data-ng-model="selectedCardNumber"> </p> </td>
 				<td>
 					<div data-ng-repeat="player in playerList">
 						{{player}} <button data-ng-show="isHost && loginSuccess" data-ng-click="passCardsOnPlatformToUser(player)">Pass</button>

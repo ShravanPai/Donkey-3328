@@ -11,10 +11,9 @@ LoginApp.controller('LoginController', function($scope, $http, $cookieStore, $in
 	$scope.reportBug = false;
 	$scope.bugDescription = '';
 	$scope.bugReporterName = '';
-	$scope.selectedCardNumber = '';
+	$scope.selectedCard = '';
 	$scope.cardNumbers = [];
 	$scope.cardsOnPlatform = [];
-	$scope.cardSelected = '';
 	$scope.nextPlayer = '';
 	var timer;
 	var gameStatePollingTimer;
@@ -177,6 +176,7 @@ LoginApp.controller('LoginController', function($scope, $http, $cookieStore, $in
     };
     
     $scope.getImagePath = function(number) {
+    	$scope.selectedCardNumber = number;
     	var path = 'images/cards/';
     	path += number;
     	path+='.png';
@@ -194,9 +194,11 @@ LoginApp.controller('LoginController', function($scope, $http, $cookieStore, $in
     		$interval.cancel(timer);
     		timer = undefined;
     	}
+    	
       	$http.get('http://donkey-3328.appspot.com/game/play/' + $scope.userName + '/' + $scope.selectedCard + '/' + $scope.gameInfo.sessionNumber + '/').
 		success(function(data) {
 			$scope.message = data;
+			$scope.selectedCard = '';
 		}).
     	error(function(data, status, headers, config){
     		$scope.message = 'Error Polling Players';
@@ -221,7 +223,13 @@ LoginApp.controller('LoginController', function($scope, $http, $cookieStore, $in
     	error(function(data, status, headers, config){
     		return 'Error Passing cards to ' + player;
     	});
-    }
+    };
+    
+    $scope.getDisplayCard = function() {
+    	if ($scope.selectedCard == '')
+    		return 'images/CardBack.png';
+    	return $scope.getImagePath($scope.selectedCard);
+    };
     
     var pollPlayers = function() {
       	$http.get('http://donkey-3328.appspot.com/game/poll_players/').
