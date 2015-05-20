@@ -252,9 +252,10 @@ LoginApp.controller('LoginController', function($scope, $http, $cookieStore, $in
 				var platFormCards = dataArray[0].trim();
 				$scope.cardNumbers = myCards.split(',');
 				$scope.cardNumbers.pop();
+				$scope.cardNumbers = getCardNumbersAsNumbers($scope.cardNumbers);
 				$scope.cardsOnPlatform = platFormCards.split(',');
 				$scope.cardsOnPlatform.pop();
-				
+				$scope.cardsOnPlatform = getCardNumbersAsNumbers($scope.cardsOnPlatform);
 				var nextPlayer = dataArray[2].trim();
 				$scope.nextPlayer = 'Next Player --> ' + nextPlayer;
 			}
@@ -263,5 +264,11 @@ LoginApp.controller('LoginController', function($scope, $http, $cookieStore, $in
     	error(function(data, status, headers, config){
     		return 'Error Polling Game State';
     	});
+    };
+    
+    var getCardNumbersAsNumbers = function(cardNumbers) {
+    	for (var i in cardNumbers)
+    		cardNumbers[i] = parseInt(cardNumbers[i]);
+    	return cardNumbers;
     };
 });
