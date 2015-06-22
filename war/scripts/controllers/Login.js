@@ -1,6 +1,4 @@
-var LoginApp = angular.module('LoginApp',['ngCookies']);
-  
-LoginApp.controller('LoginController', function($scope, $http, $cookieStore, $interval) {
+angular.module('LoginApp').controller('LoginController', ['$scope', '$http', '$cookies', '$cookieStore', '$interval', function($scope, $http, $cookies, $cookieStore, $interval) {
 	$scope.message = '';
 	$scope.userName = '';
 	$scope.loginSuccess = false;
@@ -18,8 +16,9 @@ LoginApp.controller('LoginController', function($scope, $http, $cookieStore, $in
 	var timer;
 	var gameStatePollingTimer;
 	var counter = 0;
+	var baseURL = 'http://donkey-3328.appspot.com/';
 	$scope.initParams = function() {
-    	if (!angular.isUndefined($cookieStore.get('gameInfo'))) {
+		if (!angular.isUndefined($cookieStore.get('gameInfo'))) {
     		$scope.message = 'You are already in the game as ' + $cookieStore.get('gameInfo').userName;
     		$scope.isHost = $cookieStore.get('gameInfo').isHost;
     		$scope.loginSuccess = $cookieStore.get('gameInfo').loginSuccess;
@@ -40,7 +39,7 @@ LoginApp.controller('LoginController', function($scope, $http, $cookieStore, $in
     		return;
     	}
     		
-      $http.get('http://donkey-3328.appspot.com/game/hello/'+$scope.userName+'/').
+      $http.get(baseURL + '/game/hello/'+$scope.userName+'/').
     		success(function(data) {
     			if (data.indexOf('Please select a unique name') > -1) {
     				$scope.message = data;
@@ -89,7 +88,7 @@ LoginApp.controller('LoginController', function($scope, $http, $cookieStore, $in
     		$interval.cancel(gameStatePollingTimer);
     		gameStatePollingTimer = undefined;
     	}
-    	$http.get('http://donkey-3328.appspot.com/game/end_game/').
+    	$http.get(baseURL + '/game/end_game/').
 		success(function(data) {
 			$cookieStore.remove('gameInfo');
 			$scope.message = data;
@@ -108,7 +107,7 @@ LoginApp.controller('LoginController', function($scope, $http, $cookieStore, $in
     	}
     };
     $scope.leaveGame = function() {
-    	$http.get('http://donkey-3328.appspot.com/game/leave_game/' + $cookieStore.get('gameInfo').sessionNumber).
+    	$http.get(baseURL + '/game/leave_game/' + $cookieStore.get('gameInfo').sessionNumber).
 		success(function(data) {
 			$cookieStore.remove('gameInfo');
 			$scope.loginSuccess = false;
@@ -129,7 +128,7 @@ LoginApp.controller('LoginController', function($scope, $http, $cookieStore, $in
     };    
     // TODO : Use post method to fetch data instead of get
     $scope.instructions = function() {
-    	$http.get('http://donkey-3328.appspot.com/game/instructions/').
+    	$http.get(baseURL + '/game/instructions/').
 		success(function(data) {
 			alert(data);
 		}).
@@ -144,7 +143,7 @@ LoginApp.controller('LoginController', function($scope, $http, $cookieStore, $in
     		return;
     	}
     	
-    	$http.get('http://donkey-3328.appspot.com/game/report_bug/' + $scope.bugReporterName + '~' + $scope.bugDescription + '/').
+    	$http.get(baseURL + '/game/report_bug/' + $scope.bugReporterName + '~' + $scope.bugDescription + '/').
 		success(function(data) {
 			$scope.message = data;
 	    	$scope.reportBug = false;
@@ -166,7 +165,7 @@ LoginApp.controller('LoginController', function($scope, $http, $cookieStore, $in
     		$interval.cancel(timer);
     		timer = undefined;
     	}
-      	$http.get('http://donkey-3328.appspot.com/game/start_game/').
+      	$http.get(baseURL + '/game/start_game/').
 		success(function(data) {
 			$scope.message = data;
 		}).
@@ -195,7 +194,7 @@ LoginApp.controller('LoginController', function($scope, $http, $cookieStore, $in
     		timer = undefined;
     	}
     	
-      	$http.get('http://donkey-3328.appspot.com/game/play/' + $scope.userName + '/' + $scope.selectedCard + '/' + $scope.gameInfo.sessionNumber + '/').
+      	$http.get(baseURL + '/game/play/' + $scope.userName + '/' + $scope.selectedCard + '/' + $scope.gameInfo.sessionNumber + '/').
 		success(function(data) {
 			$scope.message = data;
 			$scope.selectedCard = '';
@@ -206,7 +205,7 @@ LoginApp.controller('LoginController', function($scope, $http, $cookieStore, $in
     };
     
     $scope.passCards = function() {
-     	$http.get('http://donkey-3328.appspot.com/game/pass_cards/').
+     	$http.get(baseURL + '/game/pass_cards/').
 		success(function(data) {
 			$scope.message = data;
 		}).
@@ -216,7 +215,7 @@ LoginApp.controller('LoginController', function($scope, $http, $cookieStore, $in
     };
     
     $scope.passCardsOnPlatformToUser = function(player) {
-    	$http.get('http://donkey-3328.appspot.com/game/pass_cards_to_player/' + player + '/').
+    	$http.get(baseURL + '/game/pass_cards_to_player/' + player + '/').
 		success(function(data) {
 			$scope.message = data;
 		}).
@@ -232,7 +231,7 @@ LoginApp.controller('LoginController', function($scope, $http, $cookieStore, $in
     };
     
     var pollPlayers = function() {
-      	$http.get('http://donkey-3328.appspot.com/game/poll_players/').
+      	$http.get(baseURL + '/game/poll_players/').
 		success(function(data) {
 			$scope.playerList = data.split("\n");
 			$scope.playerList.pop();
@@ -243,7 +242,7 @@ LoginApp.controller('LoginController', function($scope, $http, $cookieStore, $in
     };
     
     var startPollingForGameInfo = function() {
-      	$http.get('http://donkey-3328.appspot.com/game/get_game_state/' + $scope.userName).
+      	$http.get(baseURL + '/game/get_game_state/' + $scope.userName).
 		success(function(data) {			
 			// TODO : Change this to form necessary variables
 			if (data.indexOf(':') > -1) {				
@@ -271,4 +270,4 @@ LoginApp.controller('LoginController', function($scope, $http, $cookieStore, $in
     		cardNumbers[i] = parseInt(cardNumbers[i]);
     	return cardNumbers;
     };
-});
+}]);
