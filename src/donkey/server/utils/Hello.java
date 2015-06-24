@@ -17,8 +17,6 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
-import jsontemplates.BaseJSON;
-
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 
