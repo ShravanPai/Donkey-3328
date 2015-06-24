@@ -17,6 +17,13 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
+import jsontemplates.BaseJSON;
+
+import com.google.gson.Gson;
+import com.google.gson.JsonObject;
+
+import donkey.server.interfaces.Constants;
+
 @Path("/hello/{userName}/")
 public class Hello {
 
@@ -26,8 +33,13 @@ public class Hello {
 	public String sayPlainTextHello(@PathParam("userName") String userName) {
 
 		// If userName already exists in the game
-		if (!isUniqueUserName(userName))
-			return "Please select a unique name";
+		if (!isUniqueUserName(userName)) {
+			JsonObject obj = new JsonObject();
+			String returnValue = "Please select a unique name";
+			obj.addProperty(Constants.STATUS, Constants.FAILURE);
+			obj.addProperty(Constants.MESSAGE, returnValue);
+			obj.toString();
+		}
 
 		int newSessionNumber = Data.numberOfPlayers;
 		Data.numberOfPlayers++;
@@ -59,24 +71,36 @@ public class Hello {
 
 	private String addPlayerAndCreateGame(String userName, int sessionNumber) {
 		Data.sessionInfo.put(sessionNumber, userName);
+		JsonObject obj = new JsonObject();
 		if (isGameHost(sessionNumber)) {
 			Data.platformDataLock = new ReentrantLock(true);
 			Data.platform = new DonkeyPlatform();
 			Data.platform.addPlayer(userName);
-			return "Welcome " + userName + ", you are the host."
+			String returnValue = "Welcome " + userName + ", you are the host."
 					+ sessionNumber;
+			
+			obj.addProperty(Constants.STATUS, Constants.SUCCESS);
+			obj.addProperty(Constants.MESSAGE, returnValue);
+			System.out.println("Shravan Data : " + obj.toString());
+			return obj.toString();
 		} else {
 			try {
 				Data.platformDataLock.lock();
 				Data.platform.addPlayer(userName);
-				return "Welcome " + userName
+				String returnValue = "Welcome " + userName
 						+ ", a game is in progress/waiting players to join "
 						+ System.lineSeparator() + "Host : "
 						+ getGameHostName() + System.lineSeparator()
 						+ "Players : " + System.lineSeparator()
 						+ getPlayerNames() + "." + sessionNumber;
+				
+				obj.addProperty("message", returnValue);
+				obj.addProperty("status", Constants.SUCCESS);
+				return obj.toString();				
 			} catch (Exception e) {
-				return "Could not add you to this platform sorry!!";
+				obj.addProperty("message", e.toString());
+				obj.addProperty("status", Constants.ERROR);
+				return obj.toString();
 			} finally {
 				Data.platformDataLock.unlock();
 			}

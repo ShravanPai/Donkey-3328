@@ -24,4 +24,12 @@ public final class Constants {
 	public static final String USER = "root";
 	public static final String PASS = "";
 	
+	// Constants related to statuses
+	public static final String SUCCESS = "success";
+	public static final String FAILURE = "failure";
+	public static final String ERROR = "error";
+	
+	// Constants related to JSON keys
+	public static final String STATUS = "status";
+	public static final String MESSAGE = "message";
 }

@@ -17,6 +17,10 @@ angular.module('LoginApp').controller('LoginController', ['$scope', '$http', '$c
 	var gameStatePollingTimer;
 	var counter = 0;
 	var baseURL = 'http://donkey-3328.appspot.com/';
+	
+	// TODO : Just for development on local. Remove this once development is done 
+	//var baseURL = 'http://localhost:8080';
+	
 	$scope.initParams = function() {
 		if (!angular.isUndefined($cookieStore.get('gameInfo'))) {
     		$scope.message = 'You are already in the game as ' + $cookieStore.get('gameInfo').userName;
@@ -41,12 +45,16 @@ angular.module('LoginApp').controller('LoginController', ['$scope', '$http', '$c
     		
       $http.get(baseURL + '/game/hello/'+$scope.userName+'/').
     		success(function(data) {
-    			if (data.indexOf('Please select a unique name') > -1) {
-    				$scope.message = data;
+    			angular.fromJson(data);
+    			
+    			if (data.status == 'failure') {
+    				$scope.message = data.message;
     				return;
-    			} else if (data.indexOf('you are the host') > -1) {
+    			}
+    			
+    			if (data.message.indexOf('you are the host') > -1) {
     				// User message and session number will be separated by a period
-    				var joinMessage = data.split(".");
+    				var joinMessage = data.message.split(".");
     				$scope.gameInfo.sessionNumber = joinMessage[1];
     				$scope.message = joinMessage[0];
     				$scope.isHost = true;
@@ -54,9 +62,9 @@ angular.module('LoginApp').controller('LoginController', ['$scope', '$http', '$c
     				$scope.gameInfo.gameHost = 'You';
     				// Start the timer to poll for the players
 
-    			} else if (data.indexOf('game is in progress') > -1) {
+    			} else if (data.message.indexOf('game is in progress') > -1) {
     				// User message and session number will be separated by a period
-    				var joinMessage = data.split(".");
+    				var joinMessage = data.message.split(".");
     				$scope.gameInfo.sessionNumber = joinMessage[1];
     				var playerArray = joinMessage[0].split('\n');
     				$scope.message = playerArray[0];
